@@ -1,0 +1,58 @@
+{
+    "countryCode": "IN",
+    "countryName": "India",
+    "dialCode": "+91",
+    "currencySymbol": "₹",
+    "flagUrl": "https://restcountries.eu/data/ind.svg",
+    "states": {
+        "AP": {
+            "code": "AP",
+            "name": "Andhra Pradesh",
+            "districtCount":26
+           
+        },
+        "KA": {
+            "code": "KA",
+            "name": "Karnataka",
+            "districtCount":31
+           
+        },
+        "TS": {
+            "code": "TS",
+            "name": "Telangana",
+            "districtCount":33
+            
+        },
+        "TN": {
+            "code": "TN",
+            "name": "Tamil Nadu",
+            "districtCount":38
+          
+        },
+        "KL": {
+            "code": "KL",
+            "name": "Kerala",
+            "districtCount":14
+           
+        },
+        "PY": {
+            "code": "PY",
+            "name": "Puducherry",
+            "districtCount":4
+           
+        },
+        "MH": {
+            "code": "MH",
+            "name": "Maharashtra",
+            "districtCount":36
+           
+        },
+        "OD": {
+            "code": "OD",
+            "name":  "Odisha",
+            "districtCount":27
+       
+        }
+       
+    }
+}
