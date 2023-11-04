@@ -42,64 +42,77 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         width: double.infinity,
         height: double.infinity,
       ),
-      Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Welcome To',
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    color: ColorConstants.textColor,
-                    fontSize: 24)),
-            const Text('ONLY MUTTON',
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    color: ColorConstants.textColor,
-                    fontSize: 34)),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text(
-                'We bring 100 % natural and \n hormone free halal meet from the \n farm to your door.',
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    color: ColorConstants.textColor,
-                    fontSize: 14)),
-            const SizedBox(
-              height: 15,
-            ),
-            SizedBox(
-              height: 40,
-              width: 327,
-              child: ElevatedButton(
-                  child: const Text('Get Started'),
-                  onPressed: onClick,
-                  style: ElevatedButton.styleFrom(
-                    primary: ColorConstants.appButtonColor,
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text('Welcome To',
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: ColorConstants.textColor,
+                          fontSize: 24)),
+                  Text('ONLY MUTTON',
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: ColorConstants.textColor,
+                          fontSize: 34)),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                      'We bring 100 % natural and \n hormone free halal meet from the \n farm to your door.',
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: ColorConstants.textColor,
+                          fontSize: 14)),
+                ],
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 40,
+                    width: 327,
+                    child: ElevatedButton(
+                        child: const Text('Get Started'),
+                        onPressed: onClick,
+                        style: ElevatedButton.styleFrom(
+                          primary: ColorConstants.appButtonColor,
 
-                    // side: BorderSide(
-                    //   width: 3,
-                    // ),
-                    elevation: 3,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    // padding:
-                    //     EdgeInsets.all(20)
-                  )),
-            )
-          ],
-        ),
+                          // side: BorderSide(
+                          //   width: 3,
+                          // ),
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                          // padding:
+                          //     EdgeInsets.all(20)
+                        )),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ],
       )
     ]);
   }

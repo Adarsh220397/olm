@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:olm/interfaces/categories.dart';
 import 'package:olm/interfaces/category_details.dart';
 import 'package:olm/src/client_apis/categories/categories_mgr.dart';
+import 'package:olm/src/presentation/screens/cart/cart_screen.dart';
 import 'package:olm/src/presentation/screens/content/content_screen.dart';
 import 'package:olm/src/utils/constants/color_constants.dart';
 import 'package:olm/src/utils/constants/icon_constants.dart';
@@ -39,6 +40,22 @@ class _DetailsScreenState extends State<DetailsScreen> {
   // }
 
   num selectedFilter = 0;
+
+  int selectedItem = -1;
+
+  int selectedFatPreference = -1;
+
+  List<ListItem> items = [
+    ListItem("Medium Curry Cut", 0.00, false),
+    ListItem("Large Curry Cut", 0.00, false),
+    ListItem("Large Biryani Cut", 0.00, false),
+    ListItem("Medium Biryani Cut", 0.00, false),
+  ];
+
+  List<ListItem> fatList = [
+    ListItem("Without fat", 20.00, false),
+    ListItem("With fat", 10.00, false),
+  ];
 
   void handleFilterSelection(num filter) {
     final matchingData = dataList.firstWhere(
@@ -95,7 +112,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   Widget detailsBody() {
-    return Column(
+    return ListView(
       children: [customAppBar(), categoryListWidget(), detailList()],
     );
   }
@@ -226,7 +243,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
             height: 10,
           ),
           SizedBox(
-            width: 200,
+            //  width: 200,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -260,68 +277,138 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(),
+                // const SizedBox(),
                 categoryDetails.selectedNumber == 0
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const SizedBox(
-                            width: 30,
+                          SizedBox(
+                            width: 112,
+                            height: 27,
+                            child: Align(
+                              alignment: Alignment.topRight,
+                              child: InkWell(
+                                  onTap: () async {
+                                    // Navigate to the DetailsScreen and get return data
+
+                                    final CategoryDetails result =
+                                        //     await Navigator.pushReplacement(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //       builder: (BuildContext context) =>
+                                        //           ContentScreen(
+                                        //             categoryDetails: categoryDetails,
+                                        //           )),
+                                        // );
+                                        await Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                      builder: (_) => ContentScreen(
+                                        categoryDetails: categoryDetails,
+                                      ),
+                                    ));
+
+                                    if (result != null) {
+                                      setState(() {
+                                        categoryDetails = result;
+                                        addedItems.add(result);
+                                      });
+                                    } else {
+                                      print(
+                                          'No data received from DetailsScreen');
+                                    }
+                                  },
+                                  child: Container(
+                                    width: 63,
+                                    height: 22,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      border: Border.all(
+                                          color: Colors.grey, width: 1),
+                                    ),
+                                    child: const Text(
+                                      'ADD +',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: ColorConstants.appButtonColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  )),
+                            ),
                           ),
-                          OutlinedButton(
-                              onPressed: () async {
-                                // Navigate to the DetailsScreen and get return data
-
-                                final CategoryDetails result =
-                                    //     await Navigator.pushReplacement(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //       builder: (BuildContext context) =>
-                                    //           ContentScreen(
-                                    //             categoryDetails: categoryDetails,
-                                    //           )),
-                                    // );
-                                    await Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                  builder: (_) => ContentScreen(
-                                    categoryDetails: categoryDetails,
-                                  ),
-                                ));
-
-                                if (result != null) {
-                                  setState(() {
-                                    categoryDetails = result;
-                                    addedItems.add(result);
-                                  });
-                                } else {
-                                  print('No data received from DetailsScreen');
-                                }
-                              },
-                              child: const Text(
-                                'ADD +',
-                                style: TextStyle(
-                                    color: ColorConstants.appButtonColor),
-                              )),
                         ],
                       )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.remove),
-                            onPressed: () => _decrementCounter(categoryDetails),
+                    : SizedBox(
+                        width: 112,
+                        height: 27,
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: Container(
+                            // margin: EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: ColorConstants.appButtonColor,
+                            ),
+                            height: 22,
+                            width: 63,
+
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment
+                                  .spaceBetween, // Align children at the start and end.
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                InkWell(
+                                  onTap: () =>
+                                      _incrementCounter(categoryDetails),
+                                  child: const Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                                // IconButton(
+                                //   icon: Icon(
+                                //     Icons.add,
+                                //     color: Colors.white,
+                                //     size: 11,
+                                //   ),
+                                //   onPressed: () =>
+                                //       _incrementCounter(categoryDetails),
+                                // ),
+                                Text(
+                                  '${categoryDetails.selectedNumber + 1}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                  ),
+                                ),
+
+                                InkWell(
+                                  onTap: () =>
+                                      _decrementCounter(categoryDetails),
+                                  child: const Icon(
+                                    Icons.remove,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                                // IconButton(
+                                //   icon: Icon(
+                                //     Icons.remove,
+                                //     color: Colors.white,
+                                //     size: 11,
+                                //   ),
+                                //   onPressed: () =>
+                                //       _decrementCounter(categoryDetails),
+                                // ),
+                              ],
+                            ),
                           ),
-                          Text(
-                            '${categoryDetails.selectedNumber + 1}',
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.add),
-                            onPressed: () => _incrementCounter(categoryDetails),
-                          ),
-                        ],
-                      ),
+                        ),
+                      )
               ],
             ),
           ),
@@ -356,7 +443,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     );
   }
 
-  Widget cartContainer() {
+  Widget cartContainer(bool bGoToCart) {
     return Container(
         padding: const EdgeInsets.only(left: 20, right: 20),
         margin: const EdgeInsets.only(bottom: 10),
@@ -386,30 +473,22 @@ class _DetailsScreenState extends State<DetailsScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                TextButton(
-                    onPressed: () {
-                      print('go to cart');
-                      // Navigator.pop(context);
-
-                      // Navigator.pop(context, newCategoryDetails);
-                      // Navigator.pushReplacement(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (BuildContext context) => DetailsScreen(
-                      //             categoryDetails: newCategoryDetails,
-                      //             // selectedHouse: widget.selectedHouse,
-                      //           )),
-                      // );
-                      // Navigator.pushAndRemoveUntil(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => DetailsScreen(
-                      //               categoryDetails: newCategoryDetails,
-                      //             )),
-                      //     (Route<dynamic> route) => false);
-                    },
-                    child: Text('View Cart',
-                        style: TextStyle(color: Colors.white))),
+                bGoToCart
+                    ? TextButton(
+                        onPressed: () {
+                          print('go to cart');
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => const CartScreen()));
+                        },
+                        child: const Text('Go To Cart',
+                            style: TextStyle(color: Colors.white)))
+                    : TextButton(
+                        onPressed: () {
+                          print('view cart');
+                          _modalBottomSheetMenu();
+                        },
+                        child: const Text('View Cart',
+                            style: TextStyle(color: Colors.white))),
               ],
             )
           ],
@@ -417,91 +496,363 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   Widget detailList() {
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    double adjustedHeight = screenHeight - 150;
     containsSelectedNumber = categoryDetailsList
         .any((CategoryDetails item) => item.selectedNumber > 0);
     print(containsSelectedNumber);
     return SizedBox(
       height: 600,
-      child: Stack(children: [
-        ListView.builder(
-          itemCount: categoryDetailsList.length,
-          itemBuilder: (context, index) {
-            final categoryDetails = categoryDetailsList[index];
-            return Container(
+      child: Stack(
+        children: [
+          ListView.builder(
+            itemCount: categoryDetailsList.length,
+            itemBuilder: (context, index) {
+              final categoryDetails = categoryDetailsList[index];
+              return Container(
                 padding: const EdgeInsets.all(10),
-                //   height: 145,
                 width: 350,
                 child: Row(
                   children: [
-                    Stack(children: [
-                      SizedBox(
-                        height: 145,
-                        width: 127,
-                        child: Image.asset(categoryDetails.image,
-                            fit: BoxFit.cover),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          const SizedBox(
-                            height: 105,
-                          ),
-                          Container(
-                            height: 40,
-                            width: 127,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(0),
-                                topRight: Radius.circular(0),
-                                bottomLeft: Radius.circular(20),
-                                bottomRight: Radius.circular(20),
+                    Stack(
+                      children: [
+                        SizedBox(
+                          height: 145,
+                          width: 127,
+                          child: Image.asset(categoryDetails.image,
+                              fit: BoxFit.cover),
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            const SizedBox(height: 105),
+                            Container(
+                              height: 40,
+                              width: 127,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(0),
+                                  topRight: Radius.circular(0),
+                                  bottomLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                ),
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [Colors.transparent, Colors.black],
+                                  stops: [0.0, 1.0],
+                                  tileMode: TileMode.clamp,
+                                ),
                               ),
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [Colors.transparent, Colors.black],
-                                stops: [0.0, 1.0],
-                                tileMode: TileMode.clamp,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Column(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       categoryDetails.offer,
                                       style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w800),
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w800,
+                                      ),
                                     ),
                                     Text(
                                       categoryDetails.offerLimit,
                                       style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600),
-                                    )
-                                  ]),
+                                        color: Colors.grey,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
-                      )
-                    ]),
-                    const SizedBox(
-                      width: 10,
+                          ],
+                        ),
+                      ],
                     ),
-                    content(categoryDetails)
+                    const SizedBox(width: 10),
+                    content(categoryDetails),
                   ],
-                ));
-          },
-        ),
-        containsSelectedNumber
-            ? Positioned(bottom: 0, left: 0, right: 0, child: cartContainer())
-            : SizedBox(),
-      ]),
+                ),
+              );
+            },
+          ),
+          if (containsSelectedNumber)
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: cartContainer(false),
+            ),
+        ],
+      ),
     );
   }
+
+  void _modalBottomSheetMenu() {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        enableDrag: true,
+        isDismissible: true,
+        backgroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+        ),
+        context: context,
+        builder: (builder) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return SizedBox(
+              height: 784,
+              child: Stack(children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // const SizedBox(height: 20),
+                    const Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: Text(
+                        'Make sure you select \nto complete shopping',
+                        style: TextStyle(
+                            fontSize: 28, fontWeight: FontWeight.w800),
+                      ),
+                    ),
+                    // const SizedBox(height: 10),
+                    Container(
+                      margin: const EdgeInsets.only(left: 20, right: 20),
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          topRight: Radius.circular(8),
+                          bottomLeft: Radius.circular(0),
+                          bottomRight: Radius.circular(0),
+                        ),
+                        color: Color(0xFFE8E8E8),
+                      ),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              const Text(
+                                'Select your choice of cut',
+                                style: TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.w700),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              const Text(
+                                'Required',
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 20, right: 20),
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      height: 152,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(0),
+                          topRight: Radius.circular(0),
+                          bottomLeft: Radius.circular(8),
+                          bottomRight: Radius.circular(8),
+                        ),
+                        color: Color(0xFFE8E8E8),
+                      ),
+                      child: ListView.builder(
+                        itemCount: items.length,
+                        itemBuilder: (context, index) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Radio(
+                                    activeColor: Colors.black,
+                                    value: index,
+                                    groupValue: selectedItem,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedItem = value!;
+                                        for (var item in items) {
+                                          item.isSelected = false;
+                                        }
+                                        items[value].isSelected = true;
+                                      });
+                                    },
+                                  ),
+                                  Text(
+                                    items[index].title,
+                                    style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                '${StringConstants.rupeeTextButton} ${items[index].cost.toString()}',
+                                style: const TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          );
+                        },
+                        // physics: NeverScrollableScrollPhysics(),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Container(
+                      margin: const EdgeInsets.only(left: 20, right: 20),
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          topRight: Radius.circular(8),
+                          bottomLeft: Radius.circular(0),
+                          bottomRight: Radius.circular(0),
+                        ),
+                        color: Color(0xFFE8E8E8),
+                      ),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                const Text(
+                                  'How do you like your meat',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                const Text(
+                                  'Required',
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400),
+                                )
+                              ]),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: 80,
+                      margin: const EdgeInsets.only(left: 20, right: 20),
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(0),
+                          topRight: Radius.circular(0),
+                          bottomLeft: Radius.circular(8),
+                          bottomRight: Radius.circular(8),
+                        ),
+                        color: Color(0xFFE8E8E8),
+                      ),
+                      child: ListView.builder(
+                        itemCount: fatList.length,
+                        itemBuilder: (context, index) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Radio(
+                                    activeColor: Colors.black,
+                                    value: index,
+                                    groupValue: selectedFatPreference,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedFatPreference = value!;
+                                        for (var item in fatList) {
+                                          item.isSelected = false;
+                                        }
+                                        fatList[value].isSelected = true;
+                                      });
+                                    },
+                                  ),
+                                  Text(
+                                    fatList[index].title,
+                                    style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                '${StringConstants.rupeeTextButton} ${fatList[index].cost.toString()}',
+                                style: const TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          );
+                        },
+                        physics: const NeverScrollableScrollPhysics(),
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: Text(
+                            'Would you like to \nspice up your meal',
+                            style: TextStyle(
+                                fontSize: 28, fontWeight: FontWeight.w800),
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 20.0),
+                          child: Text(
+                            "Select Add On's",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        Container(
+                          height: 182,
+                          color: Colors.grey,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                Positioned(
+                  bottom: 100,
+                  left: 0,
+                  right: 0,
+                  child: cartContainer(true),
+                ),
+              ]),
+            );
+          });
+        });
+  }
+}
+
+class ListItem {
+  final String title;
+  final num cost;
+  bool isSelected;
+
+  ListItem(this.title, this.cost, this.isSelected);
 }
