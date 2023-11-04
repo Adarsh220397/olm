@@ -373,12 +373,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: const [
                 Text(
                   '1 item | Rs ${80 * 1}',
                   style: TextStyle(color: Colors.white),
                 ),
-                const Text('Extra charges may apply',
+                Text('Extra charges may apply',
                     style: TextStyle(color: Colors.grey)),
               ],
             ),
